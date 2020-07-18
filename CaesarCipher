@@ -1,0 +1,76 @@
+import edu.duke.*;
+/**
+ * Write a description of CaesarCipher here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+public class CaesarCipher {
+    public String encrypt(String input, int key){
+        StringBuilder encrypt = new StringBuilder(input);
+        String normalAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        
+        String shiftedAlphabet = normalAlphabet.substring(key) +
+        normalAlphabet.substring(0, key);
+        
+            for (int i = 0; i<encrypt.length();i++){
+            char currChar = input.charAt(i);
+            int LowerCurrIndex = normalAlphabet.toLowerCase().indexOf(currChar);
+            int UpperCurrIndex = normalAlphabet.indexOf(currChar);
+            if (LowerCurrIndex != -1  || UpperCurrIndex != -1){
+                if (Character.isUpperCase(currChar)){
+                    encrypt.setCharAt(i, shiftedAlphabet.charAt(UpperCurrIndex));
+                }
+                else{
+                    encrypt.setCharAt(i, shiftedAlphabet.toLowerCase().charAt(LowerCurrIndex));
+                }
+            }
+        }
+        return encrypt.toString();
+    }
+    public void testEncrypt(){
+        String input = "At noon be in the conference room with your hat on for a surprise party. YELL LOUD!";
+        int key = 15;
+        System.out.println(" Original: "+input);
+        System.out.println("Encrypted: "+encrypt(input, key));
+    }
+    public String encryptTwoKeys(String input, int key1, int key2){
+        StringBuilder encrypt = new StringBuilder(input);
+        String normalAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        
+        String shiftedAlphabet1 = normalAlphabet.substring(key1) +
+        normalAlphabet.substring(0, key1);
+        
+        String shiftedAlphabet2 = normalAlphabet.substring(key2) +
+        normalAlphabet.substring(0, key2);
+        
+            for (int i = 0; i<encrypt.length();i++){
+            char currChar = input.charAt(i);
+            int LowerCurrIndex = normalAlphabet.toLowerCase().indexOf(currChar);
+            int UpperCurrIndex = normalAlphabet.indexOf(currChar);
+            if (LowerCurrIndex != -1  || UpperCurrIndex != -1){
+                if (i%2 == 0 || i%2 == 0){
+                    if (Character.isUpperCase(currChar)){
+                    encrypt.setCharAt(i, shiftedAlphabet1.charAt(UpperCurrIndex));
+                    }
+                    else{
+                    encrypt.setCharAt(i, shiftedAlphabet1.toLowerCase().charAt(LowerCurrIndex));
+                    }
+                }
+                else if (i%2 != 0 || i%2 != 0){
+                    if (Character.isUpperCase(currChar)){
+                    encrypt.setCharAt(i, shiftedAlphabet2.charAt(UpperCurrIndex));
+                    }
+                    else{
+                    encrypt.setCharAt(i, shiftedAlphabet2.toLowerCase().charAt(LowerCurrIndex));
+                    }
+                }
+            }
+        }
+        return encrypt.toString();
+    }
+    public void testEncryptTwoKeys(){
+        System.out.println("At noon be in the conference room with your hat on for a surprise party. YELL LOUD!");
+        System.out.println(encryptTwoKeys("At noon be in the conference room with your hat on for a surprise party. YELL LOUD!", 8, 21));
+    }
+}
