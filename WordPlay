@@ -1,0 +1,69 @@
+import edu.duke.*;
+/**
+ * Write a description of WordPlay here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+
+public class WordPlay {
+    public boolean isVowel(char ch){
+        char avowel = 'a';
+        char evowel = 'e';
+        char ivowel = 'i';
+        char ovowel = 'o';
+        char uvowel = 'u';
+        if ((ch == Character.toLowerCase(avowel) || 
+        ch == Character.toUpperCase(avowel))||(ch == Character.toLowerCase(evowel) || 
+        ch == Character.toUpperCase(evowel))||(ch == Character.toLowerCase(ivowel) || 
+        ch == Character.toUpperCase(ivowel))||(ch == Character.toLowerCase(ovowel) || 
+        ch == Character.toUpperCase(ovowel))||(ch == Character.toLowerCase(uvowel) || 
+        ch == Character.toUpperCase(uvowel))){
+            return true;
+        }
+        
+        return false;
+        
+    }
+    public void testIsVowel(){
+        char ch = 'G';
+        System.out.println(isVowel(ch));
+    }
+    public String replaceVowels(String phrase, char ch){
+        StringBuilder sb = new StringBuilder(phrase);
+        for (int i = 0; i< sb.length(); i++){
+            char currChar = phrase.charAt(i);
+            if (isVowel(currChar) == true){
+                sb.setCharAt(i, ch);
+            }
+        }
+        return sb.toString();
+    }
+    public void testReplaceVowels(){
+        String phrase = "Hello World";
+        char ch = '*';
+        System.out.println("Original: "+phrase);
+        System.out.println("Changed: "+replaceVowels(phrase, ch));
+    }
+    public String emphasize(String phrase, char ch){
+        StringBuilder sb = new StringBuilder(phrase);
+        for (int i = 0; i<sb.length(); i++){
+            char currChar = phrase.charAt(i);
+            if (currChar == Character.toLowerCase(ch) || 
+            currChar == Character.toUpperCase(ch)){
+                if (i%2 ==0){
+                    sb.setCharAt(i, '*');
+                }
+                else{
+                    sb.setCharAt(i, '+');
+                }
+            }
+        }
+        return sb.toString();
+    }
+    public void testEmphasize(){
+        String phrase = "Mary Bella Abracadabra";
+        char ch = 'a';
+        System.out.println(emphasize(phrase, ch));
+    }
+}
