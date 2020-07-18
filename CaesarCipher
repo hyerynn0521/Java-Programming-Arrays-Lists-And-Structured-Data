@@ -49,7 +49,7 @@ public class CaesarCipher {
             int LowerCurrIndex = normalAlphabet.toLowerCase().indexOf(currChar);
             int UpperCurrIndex = normalAlphabet.indexOf(currChar);
             if (LowerCurrIndex != -1  || UpperCurrIndex != -1){
-                if (i%2 == 0 || i%2 == 0){
+                if (i%2 == 0 ){
                     if (Character.isUpperCase(currChar)){
                     encrypt.setCharAt(i, shiftedAlphabet1.charAt(UpperCurrIndex));
                     }
@@ -57,7 +57,7 @@ public class CaesarCipher {
                     encrypt.setCharAt(i, shiftedAlphabet1.toLowerCase().charAt(LowerCurrIndex));
                     }
                 }
-                else if (i%2 != 0 || i%2 != 0){
+                else if (i%2 != 0){
                     if (Character.isUpperCase(currChar)){
                     encrypt.setCharAt(i, shiftedAlphabet2.charAt(UpperCurrIndex));
                     }
