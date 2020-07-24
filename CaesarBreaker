@@ -1,0 +1,139 @@
+import edu.duke.*;
+/**
+ * Write a description of CaesarBreaker here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+public class CaesarBreaker {
+    public int[] countLetters(String encrypted){
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        int[] counts = new int[26];
+        for (int i=0; i<encrypted.length();i++){
+            char currChar = Character.toLowerCase(encrypted.charAt(i));
+            
+            int alphabetIndex = alphabet.indexOf(currChar);
+            if (alphabetIndex != -1){
+                counts[alphabetIndex]++;
+            }
+            
+        }
+        return counts;
+    }
+    public int indexOfMax(int[] values) {
+
+        int max = 0;
+        int position = 0;
+            for (int i = 0; i <values.length;i++) 
+              {
+                  if (values[i] > max) 
+                    {
+                        max = values[i];
+                        position = i;
+                    } 
+        }
+        
+        return position; 
+        
+    }
+    public void testIndexOfMax(){
+        String string = "Just a test string with lots of eeeeeeeeeeeeeeeees";
+        int[] freqs = countLetters(string);
+        System.out.println(indexOfMax(freqs));
+    }
+    public String decrypt(String encrypted){
+        CaesarCipher cc = new CaesarCipher();
+        int[] freqs = countLetters(encrypted);
+        int maxDex = indexOfMax(freqs);
+        int dkey = maxDex -4;
+        if(maxDex<4){
+            dkey = 26-(4-maxDex);
+        }
+        return cc.encrypt(encrypted, 26-dkey);
+    }
+    public void testDecrypt(){
+        String encrypted = "Gwpv c vbuq pvokki yfve iqqu qc bgbgbgbgbgbgbgbgbu";
+        System.out.println(decrypt(encrypted));
+    }
+    public String halfOfString(String message, int start){
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<message.length();i++){
+            char currchar = message.charAt(i);
+            int index = message.indexOf(currchar);
+            if(i == start){
+                sb.append(message.charAt(i));
+            }
+            else if ((start-i)%2 == 0){
+                sb.append(message.charAt(i));
+            }
+        }
+        return sb.toString();
+    }
+    public void testHalfOfString(){
+        String message = "Qbkm Zgis";
+        int start = 1;
+        System.out.println(halfOfString(message, start));
+    }
+    public int getKey(String s){
+        int[] freqs = countLetters(s);
+        int maxIndex = indexOfMax(freqs);
+        return maxIndex;
+    }
+    public String encryptTwoKeys(String input, int key1, int key2){
+        StringBuilder encrypt = new StringBuilder(input);
+        String normalAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        
+        String shiftedAlphabet1 = normalAlphabet.substring(key1) +
+        normalAlphabet.substring(0, key1);
+        
+        String shiftedAlphabet2 = normalAlphabet.substring(key2) +
+        normalAlphabet.substring(0, key2);
+        
+            for (int i = 0; i<encrypt.length();i++){
+            char currChar = input.charAt(i);
+            int LowerCurrIndex = normalAlphabet.toLowerCase().indexOf(currChar);
+            int UpperCurrIndex = normalAlphabet.indexOf(currChar);
+            if (LowerCurrIndex != -1  || UpperCurrIndex != -1){
+                if (i%2 == 0 ){
+                    if (Character.isUpperCase(currChar)){
+                    encrypt.setCharAt(i, shiftedAlphabet1.charAt(UpperCurrIndex));
+                    }
+                    else{
+                    encrypt.setCharAt(i, shiftedAlphabet1.toLowerCase().charAt(LowerCurrIndex));
+                    }
+                }
+                else if (i%2 != 0){
+                    if (Character.isUpperCase(currChar)){
+                    encrypt.setCharAt(i, shiftedAlphabet2.charAt(UpperCurrIndex));
+                    }
+                    else{
+                    encrypt.setCharAt(i, shiftedAlphabet2.toLowerCase().charAt(LowerCurrIndex));
+                    }
+                }
+            }
+        }
+        return encrypt.toString();
+    }
+    public String decryptTwoKeys(String encrypted){
+        CaesarCipher cc = new CaesarCipher();
+        int[] freqs1 = countLetters(halfOfString(encrypted, 0));
+        int[] freqs2 = countLetters(halfOfString(encrypted, 1));
+        int maxDex1 = indexOfMax(freqs1);
+        int maxDex2 = indexOfMax(freqs2);
+        int dkey1 = maxDex1 -4;
+        int dkey2 = maxDex2 -4;
+        if(maxDex1<4){
+            dkey1 = 26-(4-maxDex1);
+        }
+        else if(maxDex2 <4){
+            dkey2 = 26-(4-maxDex2);
+        }
+        System.out.println("first key: "+dkey1);
+        System.out.println("second key: "+dkey2);
+        return cc.encryptTwoKeys(encrypted, 26-dkey1, 26-dkey2);
+    }
+    public void testDecryptTwoKeys(){
+        String encrypted = "Gwpv c vbuq pvokki yfve iqqu qc bgbgbgbgbgbgbgbgbu";
+        System.out.println(decryptTwoKeys(encrypted));
+    }
+}
