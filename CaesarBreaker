@@ -133,7 +133,9 @@ public class CaesarBreaker {
         return cc.encryptTwoKeys(encrypted, 26-dkey1, 26-dkey2);
     }
     public void testDecryptTwoKeys(){
-        String encrypted = "Gwpv c vbuq pvokki yfve iqqu qc bgbgbgbgbgbgbgbgbu";
+        FileResource fr = new FileResource();
+        
+        String encrypted = fr.asString();
         System.out.println(decryptTwoKeys(encrypted));
     }
 }
