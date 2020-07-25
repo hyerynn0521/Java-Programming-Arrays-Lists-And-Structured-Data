@@ -1,0 +1,39 @@
+import edu.duke.*;
+/**
+ * Write a description of OOCaesarCipher here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+public class CaesarCipher {
+    private String alphabet;
+    private String shiftedAlphabet;
+    private int mainKey;
+    public CaesarCipher(int key){
+        mainKey = key;
+        alphabet = "abcdefghijklmnopqrstuvwxyz";
+        shiftedAlphabet = alphabet.substring(key) + alphabet.substring(0, key);
+    }
+    public String encrypt(String input){
+        StringBuilder encrypt = new StringBuilder(input);
+            for (int i = 0; i<encrypt.length();i++){
+            char currChar = input.charAt(i);
+            int LowerCurrIndex = alphabet.toLowerCase().indexOf(currChar);
+            int UpperCurrIndex = alphabet.indexOf(currChar);
+            if (LowerCurrIndex != -1  || UpperCurrIndex != -1){
+                if (Character.isUpperCase(currChar)){
+                    encrypt.setCharAt(i, shiftedAlphabet.charAt(UpperCurrIndex));
+                }
+                else{
+                    encrypt.setCharAt(i, shiftedAlphabet.toLowerCase().charAt(LowerCurrIndex));
+                }
+            }
+        }
+        return encrypt.toString();
+    }
+    public String decrypt(String input){
+        
+        CaesarCipher cc = new CaesarCipher(26 - mainKey);
+        return cc.encrypt(input);
+    }
+}
