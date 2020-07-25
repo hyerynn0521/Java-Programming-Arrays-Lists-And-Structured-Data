@@ -1,0 +1,63 @@
+import edu.duke.*;
+/**
+ * Write a description of TestCaesarCipher here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+public class TestCaesarCipher {
+    public int[] countLetters(String encrypted){
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        int[] counts = new int[26];
+        for (int i=0; i<encrypted.length();i++){
+            char currChar = Character.toLowerCase(encrypted.charAt(i));
+            
+            int alphabetIndex = alphabet.indexOf(currChar);
+            if (alphabetIndex != -1){
+                counts[alphabetIndex]++;
+            }
+            
+        }
+        return counts;
+    }
+    public int indexOfMax(int[] values) {
+
+        int max = 0;
+        int position = 0;
+            for (int i = 0; i <values.length;i++) 
+              {
+                  if (values[i] > max) 
+                    {
+                        max = values[i];
+                        position = i;
+                    } 
+        }
+        
+        return position; 
+        
+    }
+    public void simpleTests(String input){
+        FileResource fr = new FileResource();
+        String frString = fr.asString();
+        CaesarCipher cc = new CaesarCipher(15);
+        System.out.println("encrypted: "+cc.encrypt(input));
+        System.out.println("decrypted: "+ cc.decrypt(input));
+    }
+    public String breakCaesarCipher(String input){
+        
+        int[] freqs = countLetters(input);
+        int maxDex = indexOfMax(freqs);
+        int dkey = maxDex -4;
+        if(maxDex<4){
+            dkey = 26-(4-maxDex);
+        }
+        CaesarCipher cc = new CaesarCipher(26 -dkey);
+        return cc.encrypt(input);
+    }
+    public void simpleTests(){
+        String input = "Can you imagine life WITHOUT the internet AND computers in your pocket?";
+        System.out.println("encrypted: "+input);
+        System.out.println("decrypted: "+breakCaesarCipher(input));
+        
+    }
+}
