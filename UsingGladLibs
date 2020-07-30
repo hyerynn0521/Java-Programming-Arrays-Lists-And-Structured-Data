@@ -96,22 +96,24 @@ public class GladLib {
         String prefix = w.substring(0,first);
         String suffix = w.substring(last+1);
         String sub = getSubstitute(w.substring(first+1,last));
-        String answer = prefix+sub+suffix;
+        String firstAnswer = prefix+sub+suffix;
         String newAnswer = "";
         
-        if (seenWords.contains(answer)){
+        if (seenWords.contains(firstAnswer)){
+            
             newAnswer = prefix+getSubstitute(w.substring(first+1, last))+suffix;
-            while(newAnswer.equals(answer)){
+            while(newAnswer.equals(firstAnswer)){
+                firstAnswer = newAnswer;
                 newAnswer =  prefix+getSubstitute(w.substring(first+1, last))+suffix;
             }
             return newAnswer;
         }
         else{
-            seenWords.add(answer);
+            seenWords.add(firstAnswer);
         }
         
         
-        return answer;
+        return firstAnswer;
     }
     
     private void printOut(String s, int lineWidth){
