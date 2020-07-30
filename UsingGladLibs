@@ -42,7 +42,9 @@ public class GladLib {
         timeList = readIt(source+"/timeframe.txt");
         verbList = readIt(source+"/verb.txt");
         fruitList = readIt(source+"/fruit.txt");
+        
         seenWords = new ArrayList<String>();
+        
     }
     
     private String randomFrom(ArrayList<String> source){
@@ -86,7 +88,7 @@ public class GladLib {
     }
     
     private String processWord(String w){
-        seenWords.clear();
+        
         
         int first = w.indexOf("<");
         int last = w.indexOf(">",first);
@@ -97,23 +99,26 @@ public class GladLib {
         String suffix = w.substring(last+1);
         String sub = getSubstitute(w.substring(first+1,last));
         String firstAnswer = prefix+sub+suffix;
-        String newAnswer = "";
         
-        if (seenWords.contains(firstAnswer)){
+        
+        if (seenWords.contains(sub)){
+            String newsub = getSubstitute(w.substring(first+1,last));
             
-            newAnswer = prefix+getSubstitute(w.substring(first+1, last))+suffix;
-            while(newAnswer.equals(firstAnswer)){
-                firstAnswer = newAnswer;
-                newAnswer =  prefix+getSubstitute(w.substring(first+1, last))+suffix;
+            while(newsub.equals(sub)){
+                
+                sub = newsub;
+                newsub = getSubstitute(w.substring(first+1,last));
+                
             }
-            return newAnswer;
+            seenWords.add(newsub);
+            return prefix+newsub+suffix;
         }
-        else{
-            seenWords.add(firstAnswer);
+        else if (!seenWords.contains(sub)){
+            seenWords.add(sub);
         }
         
         
-        return firstAnswer;
+        return prefix+sub+suffix;
     }
     
     private void printOut(String s, int lineWidth){
@@ -174,6 +179,7 @@ public class GladLib {
         System.out.println("\n");
         String story = fromTemplate("GladLib/data/madtemplate2.txt");
         printOut(story, 60);
+        seenWords.clear();
     }
     
 
