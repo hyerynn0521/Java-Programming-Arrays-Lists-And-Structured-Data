@@ -1,0 +1,56 @@
+package VigenereProgram;
+
+import java.util.*;
+import edu.duke.*;
+
+public class VigenereBreaker {
+    public String sliceString(String message, int whichSlice, int totalSlices) {
+        //REPLACE WITH YOUR CODE
+        StringBuilder sb = new StringBuilder();
+        for(int k = whichSlice; k<message.length();k+=totalSlices){
+            char currChar = message.charAt(k);
+            sb.append(currChar);
+        }
+        return sb.toString();
+        
+    }
+    
+    public void testSliceString(){
+        System.out.println(sliceString("abcdefghijklm", 3, 5));
+    }
+
+    public int[] tryKeyLength(String encrypted, int klength, char mostCommon) {
+        CaesarCracker ccrack = new CaesarCracker();
+        int[] keys = new int[klength];
+        
+        for(int k = 0; k<klength; k++){
+            String currentSlice = sliceString(encrypted, k, klength);
+            int currentKey = ccrack.getKey(currentSlice);
+            keys[k] = currentKey;
+            System.out.println(currentKey);
+            
+        }
+        return keys;
+    }
+    
+    public void testTryKeyLength(){
+        FileResource fr = new FileResource();
+        String string = fr.asString();
+        int klength = 4;
+        char mostcommon = 'e';
+        int[] keys = tryKeyLength(string, klength, mostcommon);
+        System.out.println(keys);
+    }
+
+    public void breakVigenere () {
+        //WRITE YOUR CODE HERE
+        FileResource fr = new FileResource();
+        String encrypted = fr.asString();
+        int[] keys = tryKeyLength(encrypted, 4, 'e');
+        VigenereCipher vc = new VigenereCipher(keys);
+        String result = vc.decrypt(encrypted);
+        
+        System.out.println(result.substring(0, 100));
+    }
+    
+}
