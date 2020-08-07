@@ -1,0 +1,108 @@
+package VigenereProgram;
+
+import java.util.*;
+import edu.duke.*;
+
+public class VigenereBreaker {
+    public String sliceString(String message, int whichSlice, int totalSlices) {
+        //REPLACE WITH YOUR CODE
+        StringBuilder sb = new StringBuilder();
+        for(int k = whichSlice; k<message.length();k+=totalSlices){
+            char currChar = message.charAt(k);
+            sb.append(currChar);
+        }
+        return sb.toString();
+        
+    }
+    
+    public void testSliceString(){
+        System.out.println(sliceString("abcdefghijklm", 3, 5));
+    }
+
+    public int[] tryKeyLength(String encrypted, int klength, char mostCommon) {
+        CaesarCracker ccrack = new CaesarCracker();
+        int[] keys = new int[klength];
+        
+        for(int k = 0; k<klength; k++){
+            String currentSlice = sliceString(encrypted, k, klength);
+            int currentKey = ccrack.getKey(currentSlice);
+            keys[k] = currentKey;
+            
+            
+        }
+        return keys;
+    }
+    
+    public void testTryKeyLength(){
+        FileResource fr = new FileResource();
+        String string = fr.asString();
+        int klength = 38;
+        char mostcommon = 'e';
+        int[] keys = tryKeyLength(string, klength, mostcommon);
+        System.out.println(keys);
+    }
+
+    public void breakVigenere () {
+        //WRITE YOUR CODE HERE
+        FileResource fr = new FileResource();
+        String encrypted = fr.asString();
+        FileResource dictionary = new FileResource("VigenereProgram/dictionaries/English");
+        
+        HashSet<String> words = readDictionary(dictionary);
+        String decrypted = breakForLanguage(encrypted, words);
+        
+        
+        System.out.println(decrypted.substring(0, 100));
+    }
+    
+    public HashSet<String> readDictionary(FileResource fr){
+        HashSet<String> words = new HashSet<String>();
+        
+        for(String line:fr.lines()){
+            line = line.toLowerCase();
+            words.add(line);
+        }
+        return words;
+    }
+    
+    public int countWords(String message, HashSet<String> dictionary){
+        String[] words = message.split("\\W+");
+        
+        int realWords = 0;
+        for(int k = 0; k<words.length; k++){
+            String currentWord = words[k].toLowerCase();
+            if(dictionary.contains(currentWord)){
+                realWords ++;
+            }
+        }
+        
+        return realWords;
+    }
+    
+    public String breakForLanguage(String encrypted, HashSet<String> dictionary){
+        int currentRealWords = 0;
+        int maxRealWords = 0;
+        String trueDecrypted = "";
+        StringBuilder alphabet = new StringBuilder("abcdefghijklmnopqrstuvwxyz");
+        FileResource fr = new FileResource("VigenereProgram/dictionaries/English");
+        int trueKeyLength = 0;
+        for(int k = 1; k<101; k++){
+            int[] keys = tryKeyLength(encrypted, k, 'e');
+            
+            
+            
+            VigenereCipher vc = new VigenereCipher(keys);
+            String decrypted = vc.decrypt(encrypted);
+            currentRealWords = countWords(decrypted, readDictionary(fr));
+            if(currentRealWords>maxRealWords){
+                maxRealWords = currentRealWords;
+                trueDecrypted = decrypted;
+                trueKeyLength = keys.length;
+            }
+        }
+        System.out.println(maxRealWords+" are real words");
+        System.out.println("key: "+trueKeyLength);
+        return trueDecrypted;
+    }
+    
+}   
